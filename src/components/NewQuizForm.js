@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import ROUTES from "../app/routes";
+import { addCard } from "../features/cards/cardsSlice";
 import { thunkAction } from "../features/quizzes/QuizzesSlice";
 import { selectTopics } from "../features/topics/TopicsSlice";
 
@@ -20,10 +21,19 @@ export default function NewQuizForm() {
       return;
     }
     const cardIds = [];
-    let uniqueId = uuidv4();
+
+    cards.forEach(card =>{
+      let uniqueId = uuidv4();
+      dispatch(addCard({
+        id:uniqueId,
+        front: card.front,
+        back: card.back,
+      }));
+      cardIds.push(uniqueId);
+    })
 
     dispatch(thunkAction({
-      id:uniqueId,
+      id:uuidv4(),
       name: name,
       topicId:topicId,
       cardIds:cardIds,
